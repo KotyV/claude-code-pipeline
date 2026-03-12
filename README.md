@@ -147,3 +147,5 @@ The skills encode the discipline that made this possible.
 ## License
 
 MIT — fork it, adapt it, make it yours.
+
+Made with caffeine in Marseille. For Charlie.
