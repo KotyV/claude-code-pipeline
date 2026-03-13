@@ -1,7 +1,7 @@
 # Recovery Protocol -- Resuming after interruption or failure
 
 How to detect, diagnose, and resume when something breaks mid-pipeline.
-Referenced by `/new-feature`, `/implement`.
+Referenced by `/new-feature`, `/implement`, `/bug-fix`.
 
 ---
 

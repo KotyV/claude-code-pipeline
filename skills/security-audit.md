@@ -1,5 +1,6 @@
 ---
 name: security-audit
+allowed-tools: Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git show:*), Bash(git commit:*), Bash(git add:*), Read, Glob, Grep, Edit, Agent
 description: >
   Audits codebase for security vulnerabilities across 6 categories:
   Auth & Authorization (25%), Injection (20%), Input Validation (20%),
@@ -26,10 +27,10 @@ Analyze the codebase to detect vulnerabilities. Score 0-100 with grades A-F.
 | # | Category | Weight | Key points |
 |---|----------|--------|------------|
 | 1 | Auth & Authorization | 25% | JWT verification on every route, no hardcoded secrets, CORS config |
-| 2 | Injection | 20% | SQL (ORM only), Command, Path Traversal, Deserialization |
+| 2 | Injection | 20% | SQL (ORM only), Command, Path Traversal, Deserialization, SSRF (external API calls) |
 | 3 | Input Validation | 20% | Strict schema validation, size limits, UUID format, capped pagination |
 | 4 | Sensitive Data & Logging | 15% | No PII/tokens in logs, structured logging, generic error messages |
-| 5 | Config & Dependencies | 10% | Conditional CORS, security headers, dependency audit, non-root Docker |
+| 5 | Config & Dependencies | 10% | Conditional CORS, security headers, dependency audit, non-root Docker, rate limiting (endpoints without rate limiting), CSRF (mitigated by Bearer token auth — no cookies = no CSRF) |
 | 6 | AI/LLM Security | 10% | Prompt isolation, untrusted responses, timeouts |
 
 ---
@@ -46,8 +47,8 @@ Analyze the codebase to detect vulnerabilities. Score 0-100 with grades A-F.
 | Grade | Score | Meaning |
 |-------|-------|---------|
 | A | 90-100 | Production ready |
-| B | 80-89 | Minor improvements needed |
-| C | 70-79 | Acceptable (minimum for deploy) |
+| B | 80-89 | Minor improvements needed (minimum for deploy) |
+| C | 70-79 | Below minimum — improvements required |
 | D | 60-69 | Fixes required before deploy |
 | F | <60 | Not deployable |
 
@@ -74,16 +75,7 @@ For each category: list files, verify each point, identify vulnerabilities, clas
 
 ### Step 3: Filter false positives
 
--> Apply automatic exclusions and stack precedents from `references/security-rules.md`.
-
-Signal quality criteria — for each remaining finding:
-
-1. Can an unauthenticated attacker exploit this?
-2. Real risk of data breach?
-3. Specific code locations?
-4. Concrete and reproducible exploitation scenario?
-
-If "no" to 3+ questions -> DO NOT report.
+-> Apply false-positive filtering from references/security-rules.md (section 8).
 
 ### Step 4: Calculate the score
 

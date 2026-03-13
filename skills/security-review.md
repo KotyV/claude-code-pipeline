@@ -84,15 +84,8 @@ Examine each modified file, trace data flow, look for privilege boundaries cross
 
 ## False Positive Filtering
 
+-> Apply false-positive filtering from references/security-rules.md (section 8).
 -> Apply automatic exclusions and stack precedents from `references/security-rules.md`.
-
-Signal quality criteria:
-1. Can an unauthenticated attacker exploit this?
-2. Real risk of data breach?
-3. Specific code locations and reproduction steps?
-4. Could the security team act on this finding?
-
-If "no" to 3+ questions -> EXCLUDE.
 
 ---
 

@@ -1,7 +1,7 @@
 # Preflight Checklist -- Validation before starting
 
 Mandatory verification BEFORE starting any pipeline phase.
-Referenced by `/implement`, `/qa-tests`, `/new-feature`.
+Referenced by `/implement`, `/qa-tests`, `/new-feature`, `/bug-fix`.
 
 ---
 

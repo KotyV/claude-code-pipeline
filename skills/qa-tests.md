@@ -242,6 +242,42 @@ class TestExternalDependencyFailures:
             await call_external_api(params={"query": "test"})
 ```
 
+#### 4j. Property-based testing
+
+Use Hypothesis (Python) or fast-check (TS/JS) to generate random inputs and find unexpected edge cases.
+
+```python
+from hypothesis import given, strategies as st
+
+@given(score=st.floats(allow_nan=True, allow_infinity=True))
+def test_score_label_never_crashes(score):
+    result = get_score_label(score)
+    assert result in ("green", "yellow", "red")
+```
+
+#### 4k. Snapshot testing
+
+Verify API response schema stability with snapshots. Detect unintended schema changes by comparing against stored snapshots.
+
+```python
+def test_resource_response_schema(client, snapshot):
+    response = client.get("/api/v1/resources/valid-id")
+    assert response.status_code == 200
+    snapshot.assert_match(response.json(), "resource_response.json")
+```
+
+#### 4l. Contract testing
+
+Verify frontend/backend compatibility using shared schemas or generated types. Ensure API responses match the types the frontend expects.
+
+```python
+def test_api_response_matches_shared_schema(client):
+    response = client.get("/api/v1/resources")
+    assert response.status_code == 200
+    # Validate against the shared schema used by both frontend and backend
+    SharedResourceSchema.model_validate(response.json())
+```
+
 ### Step 5: Run and verify
 
 ```bash

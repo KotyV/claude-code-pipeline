@@ -14,6 +14,8 @@ description: >
 
 First step of the `/new-feature` pipeline. Transform a raw request into a structured discovery document.
 
+-> See references/domain-examples.md for concrete domain examples.
+
 ---
 
 ## Prerequisites

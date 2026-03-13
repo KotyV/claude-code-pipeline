@@ -321,3 +321,17 @@ Before ANY deployment to production:
    NO -> Do not report (too speculative)
    YES -> Report with severity and recommended fix
 ```
+
+---
+
+## 8. False Positive Filtering — Signal Quality
+
+Criteria to determine if a finding is a true positive:
+
+1. Can an unauthenticated attacker exploit this?
+2. Real risk of data breach?
+3. Specific code locations and reproduction steps?
+4. Could the security team act on this finding?
+
+If "no" to 3+ questions -> EXCLUDE the finding.
+Only report findings with confidence >= 0.8.

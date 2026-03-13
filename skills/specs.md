@@ -14,6 +14,8 @@ description: >
 
 Transform the validated discovery into implementable specifications.
 
+-> See references/domain-examples.md for concrete domain examples.
+
 ---
 
 ## Prerequisites

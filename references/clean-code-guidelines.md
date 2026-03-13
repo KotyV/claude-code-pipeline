@@ -1,6 +1,6 @@
 # Clean Code Guidelines
 
-Shared reference for `/implement`, `/architecture`, and `/qa-tests`.
+Shared reference for `/implement`, `/architecture`, `/qa-tests`, and `/bug-fix`.
 Read this file BEFORE writing any code.
 
 ---

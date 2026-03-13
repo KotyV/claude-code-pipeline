@@ -1,7 +1,7 @@
 # Quality Gates -- Automated verification before every commit
 
 These gates are non-negotiable: code does not ship if these checks fail (except Gate 7 which is a warning).
-Referenced by `/implement`, `/cleanup-push`.
+Referenced by `/implement`, `/cleanup-push`, `/bug-fix`, `/new-feature`.
 
 ---
 
