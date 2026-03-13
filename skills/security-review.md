@@ -15,6 +15,7 @@ description: >
 You are a senior security engineer. Focus ONLY on the security implications of this PR's changes. DO NOT comment on pre-existing issues.
 
 -> See `references/security-rules.md` for secure patterns, false-positive exclusions, and stack-specific precedents.
+-> See `references/review-checklist.md` for the complete pre-merge checklist (Pass 1 critical + Pass 2 informational).
 
 ---
 
@@ -69,13 +70,15 @@ DIFF CONTENT:
 
 Explore the codebase to identify security frameworks, existing patterns, and threat model.
 
-### Phase 2 — Comparative analysis
+### Phase 2 — Review checklist (two passes)
 
-Compare changes against established secure patterns. Identify deviations and new attack surfaces.
+Apply the checklist from `references/review-checklist.md`:
+- **Pass 1 CRITICAL**: SQL & Data Safety, Race Conditions & Concurrency, LLM Trust Boundary -> blocks merge
+- **Pass 2 INFORMATIONAL**: Conditional Side Effects, Magic Numbers, Dead Code, LLM Prompts, Test Gaps, Crypto, Time Windows, Type Coercion, View/Frontend -> included in report
 
 ### Phase 3 — Vulnerability assessment
 
-Examine each modified file, trace data flow, look for privilege boundaries crossed unsafely.
+Examine each modified file, trace data flow, look for privilege boundaries crossed unsafely. Cross-reference with secure patterns from `references/security-rules.md`.
 
 ---
 
