@@ -88,7 +88,20 @@ BEFORE writing code: look at how a similar module is done in the codebase, copy 
 
 If tests fail: analyze, fix, re-run. If persists after 3 attempts → see `references/recovery-protocol.md`.
 
-#### 4. CHECKPOINT BEFORE COMMIT
+#### 4. Refactor pass
+
+Before committing, check:
+
+- **Dead code**: remove unused imports, orphaned functions/variables removed by the change
+- **Size**: if the file exceeds 300 lines → split into sub-modules (separate `refactor:` commit)
+- **Duplication**: code copy-pasted 3+ times → extract into a reusable function
+
+```bash
+[your linter] --select unused-imports [modified files]
+wc -l [modified files]
+```
+
+#### 5. CHECKPOINT BEFORE COMMIT
 
 ```
 "Final check for US-N:
@@ -96,13 +109,15 @@ If tests fail: analyze, fix, re-run. If persists after 3 attempts → see `refer
 - [ ] Type check OK
 - [ ] Quality gates passed
 - [ ] Code complete — no TODO/FIXME
+- [ ] No dead code (unused imports, orphaned functions)
+- [ ] No modified file > 300 lines
 
 Ready to commit this story?"
 ```
 
 **DO NOT commit without explicit validation.**
 
-#### 5. Commit
+#### 6. Commit
 
 ```bash
 git add [story files]

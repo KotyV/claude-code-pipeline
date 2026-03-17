@@ -140,6 +140,30 @@ Reproduced by: [test name]"
 
 ---
 
+### Phase 3b: REFACTOR — Clean up dead code
+
+After the fix, check if the change left dead code or made a file too large:
+
+1. **Dead code**: unused imports, orphaned functions/variables from the fix
+2. **Size**: if the fixed file exceeds 300 lines → consider splitting (separate commit)
+3. **Duplication**: if the fix introduced duplicated code → extract into a shared function
+
+```bash
+# Detect unused imports in modified files
+[your linter] --select unused-imports [modified files]
+```
+
+If refactoring was done, commit separately:
+
+```bash
+git commit -m "refactor: clean up dead code after [bug description]"
+```
+
+> Note: this step is lightweight for bug fixes. Do not refactor beyond the scope of the fix.
+> If major refactoring is needed, note it and do it in a dedicated session.
+
+---
+
 ### Phase 4: VERIFY — No regression
 
 → Run quality gates — see `references/quality-gates.md`.

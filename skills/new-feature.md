@@ -29,6 +29,7 @@ Pipeline complet : Discovery → Specs → Architecture → Implement → Tests 
 │  /architecture       → Design the technical solution            │
 │       ⚡ CHECKPOINT: User validates design                       │
 │  /implement          → Code each story (1 commit per story)     │
+│  Refactor pass       → Dead code, SRP, split files > 300 lines │
 │  /qa-tests           → Full test pyramid                        │
 │  /security-audit     → OWASP audit (score >= 80)                │
 │  /cleanup-push       → Lint + build + push + documentation      │
@@ -93,9 +94,33 @@ Each sub-command has its own detailed instructions:
 2. `/specs` → break into user stories → **CHECKPOINT**
 3. `/architecture` → design the solution → **CHECKPOINT**
 4. `/implement` → code each story with incremental commits
-5. `/qa-tests` → validate with full test pyramid
-6. `/security-audit` → audit security (score >= 80, grade B minimum)
-7. `/cleanup-push` → clean up, push, document
+5. **Refactor pass** → clean dead code, enforce SRP, split files > 300 lines
+6. `/qa-tests` → validate with full test pyramid
+7. `/security-audit` → audit security (score >= 80, grade B minimum)
+8. `/cleanup-push` → clean up, push, document
+
+### Step 5b: Refactor pass (MANDATORY after implement)
+
+After implementation, BEFORE QA tests, perform a cleanup pass:
+
+1. **Dead code**: remove unused imports, orphaned functions/variables/classes replaced by your changes
+2. **SRP**: if a modified file exceeds 300 lines → identify responsibilities and split into sub-modules
+3. **Re-exports**: if code was moved, maintain re-exports for backward compatibility of existing imports
+4. **Verify**: run tests after each refactor to guarantee zero regression
+
+```bash
+# Detect unused imports in modified files
+[your linter] --select unused-imports [modified files]
+
+# Check file sizes
+wc -l [modified files]
+```
+
+If a modified file exceeds 300 lines, commit the refactor separately:
+
+```bash
+git commit -m "refactor: split [file] into [sub-modules]"
+```
 
 ### Step 8: Final report
 
