@@ -133,6 +133,7 @@ Most frequent cases:
 3. Stack traces in dev -> OK if debug mode is conditional
 4. Raw SQL without user input -> OK
 5. LLM responses in logs -> warning only (not CRITICAL)
+6. CSRF with Bearer-token-only auth -> not applicable (no cookies = no CSRF vector)
 
 ---
 
