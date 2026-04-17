@@ -38,6 +38,7 @@ Skills reference these shared docs instead of duplicating content:
 | `references/clean-code-guidelines.md` | SRP, design patterns (Repository, Strategy, Factory), error handling, logging, input validation |
 | `references/quality-gates.md` | 11 automated gates that must pass before every commit |
 | `references/security-rules.md` | Secure patterns by stack, decision tree ("is this a vulnerability?"), false-positive exclusions |
+| `references/review-checklist.md` | Two-pass pre-merge review — critical gates (SQL, races, LLM trust) and informational flags |
 | `references/domain-examples.md` | Concrete code examples: API endpoint, scoring logic, React component, tests |
 | `references/preflight-checklist.md` | Pre-implementation verification: git clean, tests baseline, type check baseline |
 | `references/recovery-protocol.md` | How to detect state, resume after interruption, handle regressions |
@@ -113,6 +114,7 @@ Every major phase ends with a mandatory checkpoint where Claude presents its wor
     ├── clean-code-guidelines.md
     ├── quality-gates.md
     ├── security-rules.md
+    ├── review-checklist.md
     ├── domain-examples.md
     ├── preflight-checklist.md
     └── recovery-protocol.md
