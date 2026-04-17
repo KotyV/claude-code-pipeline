@@ -11,7 +11,7 @@ description: >
 
 # New Feature — Master Orchestrator
 
-Pipeline complet : Discovery → Specs → Architecture → Implement → Tests → Security → Cleanup → Push.
+Complete pipeline: Discovery → Specs → Architecture → Implement → Tests → Security → Cleanup → Push → Docs.
 
 ---
 
@@ -33,6 +33,7 @@ Pipeline complet : Discovery → Specs → Architecture → Implement → Tests 
 │  /qa-tests           → Full test pyramid                        │
 │  /security-audit     → OWASP audit (score >= 80)                │
 │  /cleanup-push       → Lint + build + push + documentation      │
+│  Auto-merge          → gh pr checks --watch + gh pr merge       │
 │                                                                  │
 └─────────────────────────────────────────────────────────────────┘
 ```
@@ -86,6 +87,7 @@ Read project knowledge files:
 
 Then run the preflight → see `references/preflight-checklist.md`.
 Create a feature branch from main: `git checkout -b feat/[slug]`
+Record the baseline in `.product/pipeline-state.json` (see State Management below).
 
 ### Steps 1-7: Execute sub-commands in order
 
@@ -122,7 +124,32 @@ If a modified file exceeds 300 lines, commit the refactor separately:
 git commit -m "refactor: split [file] into [sub-modules]"
 ```
 
-### Step 8: Final report
+### Step 8: Auto-merge
+
+```bash
+gh pr checks [PR_NUMBER] --watch
+gh pr merge [PR_NUMBER] --squash --delete-branch
+```
+
+If a check fails: diagnose, fix, re-push, re-verify.
+
+### Step 8b: Update documentation (MANDATORY — DO NOT SKIP)
+
+**This step is the #1 cause of stale docs. It MUST run BEFORE the final report.**
+
+If your project maintains spec/knowledge files (examples below are common conventions — adapt to your project), update them now:
+
+1. **Feature registry / CHANGELOG** — Add the feature to the "Done" list with date, scope, and PR(s)
+2. **Functional spec** — If user-facing behavior changed (new endpoints, new pages, new metrics), update the impacted sections. Update the "Last updated" date.
+3. **Technical spec / architecture doc** — If file structure, data models, technical patterns, or test layout changed, update accordingly.
+4. **README.md** — If tech stack, project structure, env vars, or API endpoints changed.
+5. **CLAUDE.md** — If new conventions, patterns, or rules were introduced.
+
+**Rule**: if NONE of these files are impacted (pure cosmetic, typo), note "docs: no changes needed" in the final report. Otherwise, list the files updated.
+
+→ See `/cleanup-push` for the full documentation update routine.
+
+### Step 9: Final report
 
 ```markdown
 ## Feature Complete: [Title]
@@ -135,25 +162,82 @@ git commit -m "refactor: split [file] into [sub-modules]"
 | Specs | ✓ | X user stories |
 | Architecture | ✓ | X files planned |
 | Implementation | ✓ | X commits |
-| Tests | ✓ | X tests |
+| Tests | ✓ | X tests, Y% coverage |
 | Security | ✓ | Score XX/100 (Grade X) |
-| Push | ✓ | PR: [url] |
+| Push | ✓ | PR: [url] — merged |
+
+### Files created/modified
+[list]
 
 ### Tests
 - Baseline: X tests → Final: Y tests → No regression: ✓
 
+### User impact
+[What changes for the end user]
+
 ### How to test
 1. [Step 1]
 2. [Step 2]
+
+### Documentation updated
+- [list of files]
+
+### Next steps
+[What remains]
 ```
 
 ---
 
-## Usage
+## State Management
+
+**File: `.product/pipeline-state.json`** — OPTIONAL but strongly recommended. Update at each step so `--continue` can resume cleanly.
+
+```json
+{
+  "feature_slug": "user-dashboard",
+  "started_at": "2026-01-15T14:00:00Z",
+  "current_step": "implement",
+  "scope": "full_stack",
+  "baseline": { "tests_passed": 76, "tests_failed": 0 },
+  "steps": {
+    "discovery": { "status": "completed", "output": ".product/features/user-dashboard-discovery.md" },
+    "specs": { "status": "completed", "stories_count": 6 },
+    "architecture": { "status": "completed", "output": ".product/architecture/user-dashboard.md" },
+    "implement": { "status": "in_progress", "stories_completed": 3, "stories_total": 6, "commits": [] },
+    "qa_tests": { "status": "pending" },
+    "security": { "status": "pending" },
+    "push": { "status": "pending" }
+  }
+}
+```
+
+See `references/recovery-protocol.md` for resume logic.
+
+---
+
+## Execution Modes
 
 ```bash
-/new-feature "Description of the feature"
-/new-feature --continue              # Resume interrupted pipeline
-/new-feature "Description" --backend-only
-/new-feature "Description" --frontend-only
+/new-feature "Description"                 # Full pipeline
+/new-feature --continue                    # Resume interrupted (see references/recovery-protocol.md)
+/new-feature "Description" --backend-only  # API only
+/new-feature "Description" --frontend-only # UI only
+/new-feature "Description" --mvp-only      # Only P0 stories (skip P1/P2)
 ```
+
+---
+
+## Final Checklist — Before declaring "complete"
+
+→ See `references/quality-gates.md` for exact gate commands.
+
+- [ ] All checkpoints validated by the user
+- [ ] Quality gates passed (11 gates)
+- [ ] Tests >= baseline (no regression)
+- [ ] Type errors <= baseline
+- [ ] At least one commit per module/story
+- [ ] DB migrations created if models changed
+- [ ] Security audit score >= 80 (Grade B minimum)
+- [ ] Documentation updated (see Step 8b)
+- [ ] Git push + PR created + CI checks passed + PR merged
+- [ ] Testing instructions provided
