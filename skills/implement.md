@@ -124,6 +124,10 @@ git add [story files]
 git commit -m "feat: US-N — [short description]"
 ```
 
+#### 7. Update pipeline state (if used)
+
+If your project tracks pipeline progress (e.g., `.product/pipeline-state.json` — see `/new-feature`), increment `stories_completed` and append the commit SHA. Skip this step if you are not using state tracking.
+
 ---
 
 ## Troubleshooting
